@@ -1,10 +1,38 @@
-// Функция для преобразования файла в Base64
-function convertFileToBase64(file) {
+// Функция для преобразования файла в Base64 с предварительным сжатием
+function convertFileToCompressedBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxDimension = 1024; // Максимальный размер (ширина или высота)
+        let width = img.width;
+        let height = img.height;
+
+        // Масштабируем, если размер превышает maxDimension
+        if (width > height && width > maxDimension) {
+          height = (maxDimension / width) * height;
+          width = maxDimension;
+        } else if (height > maxDimension) {
+          width = (maxDimension / height) * width;
+          height = maxDimension;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Получаем сжатое изображение в формате Base64
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.8); // Качество 80%
+        resolve(compressedBase64);
+      };
+      img.onerror = (error) => reject(error);
+      img.src = reader.result; // Загружаем изображение в элемент <img>
+    };
     reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file); // Читаем файл как Data URL
   });
 }
 
@@ -12,7 +40,7 @@ function convertFileToBase64(file) {
 async function analyzeImage(field, base64Image) {
   try {
     const response = await puter.ai.chat(
-      "Ёмко и структурно перепиши ифнормацию с картинки",
+      "Ёмко и структурно перепиши информацию с картинки",
       base64Image
     );
     return response.message.content;
@@ -33,8 +61,8 @@ document.getElementById("submit").addEventListener("click", async () => {
 
     if (fileInput.files.length > 0) {
       const file = fileInput.files[0];
-      const base64Image = await convertFileToBase64(file);
-      result[field] = await analyzeImage(field, base64Image);
+      const compressedBase64Image = await convertFileToCompressedBase64(file);
+      result[field] = await analyzeImage(field, compressedBase64Image);
     } else if (textInput.value.trim()) {
       result[field] = textInput.value.trim();
     } else {
@@ -48,7 +76,7 @@ document.getElementById("submit").addEventListener("click", async () => {
   try {
     puter.ai
       .chat(
-        `Проверь ответ на задание по заданным условиям и критериям. Мне нужен строгий и ёмкий анализ по пуктам из критериев: ${JSON.stringify(
+        `Проверь ответ на задание по заданным условиям и критериям. Мне нужен строгий и ёмкий анализ по пунктам из критериев: ${JSON.stringify(
           result
         )}`
       )
