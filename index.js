@@ -48,7 +48,7 @@ document.getElementById("submit").addEventListener("click", async () => {
   try {
     puter.ai
       .chat(
-        `Проверь ответ на задание по заданным условиям и критериям: ${JSON.stringify(
+        `Проверь ответ на задание по заданным условиям и критериям. Мне нужен строгий и ёмкий анализ по пуктам из критериев: ${JSON.stringify(
           result
         )}`
       )
