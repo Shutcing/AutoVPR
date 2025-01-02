@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <title>Auto VPR</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="wrapper__container">
+        <div class="block">
+          <h2>Введите текст или загрузите изображение:</h2>
+          <div class="field">
+            <label>
+              Текст:
+              <textarea class="input text" data-field="text"></textarea>
+            </label>
+            <label>
+              <input
+                type="file"
+                class="input image"
+                data-field="text"
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <h2>Условия задания:</h2>
+          <div class="field">
+            <label>
+              Текст:
+              <textarea class="input text" data-field="term"></textarea>
+            </label>
+            <label>
+              <input
+                type="file"
+                class="input image"
+                data-field="term"
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <h2>Ответ:</h2>
+          <div class="field">
+            <label>
+              Текст:
+              <textarea class="input text" data-field="answer"></textarea>
+            </label>
+            <label>
+              <input
+                type="file"
+                class="input image"
+                data-field="answer"
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <h2>Критерии оценивания:</h2>
+          <div class="field">
+            <label>
+              Текст:
+              <textarea class="input text" data-field="points"></textarea>
+            </label>
+            <label>
+              <input
+                type="file"
+                class="input image"
+                data-field="points"
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+
+        <button id="submit" class="btn">Отправить</button>
+        <div id="output"></div>
+      </div>
+    </div>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
